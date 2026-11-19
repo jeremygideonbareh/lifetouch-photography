@@ -73,7 +73,7 @@ export default function Loader({ onDone }: { onDone: () => void }) {
 
       const count = gsap.to(counter, {
         v: 100,
-        duration: reduced || seen ? 0.25 : 1.5,
+        duration: reduced || seen ? 0.25 : 1.1,
         ease: 'power2.inOut',
         onUpdate: () => {
           // never run ahead of the real downloads
@@ -116,14 +116,19 @@ export default function Loader({ onDone }: { onDone: () => void }) {
           .to(q('[data-meta], [data-corner], [data-focus]'), { autoAlpha: 0, duration: 0.3 }, '<')
           .to(q('[data-lens-shade]'), { autoAlpha: 0, duration: 0.4 }, '<')
           .fromTo(q('[data-lens]'), { clipPath: () => `${lensInset()} round 0px 0px 0px 0px` }, { clipPath: archInset, duration: 1.1, ease: 'expo.inOut' }, '<0.1')
-          .to(root.current, { autoAlpha: 0, duration: 0.6, ease: 'power2.out' });
+          // the hero's name, header and buttons enter around the photo while it settles
+          .call(() => document.documentElement.classList.remove('is-loading'), [], '<0.35')
+          .to(q('[data-paper]'), { autoAlpha: 0, duration: 0.6, ease: 'power2.out' }, '<')
+          .to(root.current, { autoAlpha: 0, duration: 0.3, ease: 'power2.out' });
       });
     },
     { scope: root },
   );
 
   return (
-    <div ref={root} className="hero-bg fixed inset-0 z-[100] flex items-center justify-center overflow-hidden text-pine">
+    <div ref={root} className="fixed inset-0 z-[100] flex items-center justify-center overflow-hidden text-pine">
+      {/* the paper is its own layer so it can lift while the photo settles, revealing the hero around it */}
+      <div data-paper className="hero-bg absolute inset-0" />
       <div className="absolute left-6 top-6 overflow-hidden text-lg tracking-wide sm:left-10 sm:top-8">
         <p data-meta className="font-poem text-2xl italic">Lifetouch</p>
       </div>

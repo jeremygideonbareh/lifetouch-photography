@@ -18,6 +18,9 @@ export default function App() {
     const stop = startSmoothScroll();
     getLenis()?.stop();
     window.scrollTo(0, 0);
+    // measure once the fonts are in, while the loader still covers the page: a refresh re-wraps the
+    // pinned hero, which would restart its entrance animations if it happened after the reveal
+    document.fonts.ready.then(() => ScrollTrigger.refresh());
     return stop;
   }, []);
 
@@ -27,7 +30,6 @@ export default function App() {
     document.body.style.overflow = loading ? 'hidden' : '';
     if (!loading) {
       getLenis()?.start();
-      document.fonts.ready.then(() => ScrollTrigger.refresh());
       warmLazyImages();
     }
   }, [loading]);

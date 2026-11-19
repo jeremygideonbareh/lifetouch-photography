@@ -7,7 +7,8 @@ gsap.registerPlugin(ScrollTrigger, useGSAP);
 
 export { gsap, ScrollTrigger, useGSAP };
 
-ScrollTrigger.config({ ignoreMobileResize: true });
+// no refresh on the window load event: it lands after the reveal and would replay the hero entrance
+ScrollTrigger.config({ ignoreMobileResize: true, autoRefreshEvents: 'visibilitychange,DOMContentLoaded,resize' });
 
 // The demo plays in full by default; the footer switch is the opt-out (html.motion-off is set in index.html)
 const MOTION_KEY = 'lifetouch-motion';
