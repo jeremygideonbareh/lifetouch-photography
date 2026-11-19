@@ -1,0 +1,274 @@
+@tailwind base;
+@tailwind components;
+@tailwind utilities;
+
+html,
+body {
+  margin: 0;
+  background: #151b17;
+  /* Large type in the serif of Lifetouch's album pages; small print in the grotesk */
+  font-family: 'Cormorant Garamond', Georgia, serif;
+  font-weight: 500;
+  -webkit-font-smoothing: antialiased;
+}
+
+.text-xs,
+.text-sm,
+.text-\[11px\],
+.text-\[1\.25svh\] {
+  font-family: 'Manrope', Helvetica, Arial, sans-serif;
+  font-weight: 400;
+}
+
+html.lenis,
+html.lenis body {
+  height: auto;
+}
+.lenis.lenis-smooth {
+  scroll-behavior: auto !important;
+}
+.lenis.lenis-stopped {
+  overflow: hidden;
+}
+
+::selection {
+  background: #c2a27a;
+  color: #151b17;
+}
+
+@media (pointer: fine) {
+  body,
+  a,
+  button {
+    cursor: none;
+  }
+}
+
+/* Hero entrances hold their first frame until the loader's shutter opens */
+.is-loading .anim-fade-in,
+.is-loading .anim-press,
+.is-loading .anim-fade-up,
+.is-loading .anim-line {
+  animation-play-state: paused;
+}
+
+/* Reveal mask that clips the entrance path but leaves room for ascenders, descenders and italic overhang.
+   In the components layer so utilities like `block` can still override the display. */
+@layer components {
+  .mask {
+    display: inline-block;
+    vertical-align: bottom;
+    clip-path: inset(-0.4em -0.2em -0.28em -0.2em);
+  }
+}
+
+.grain::after {
+  content: '';
+  position: absolute;
+  inset: -50%;
+  opacity: 0.07;
+  background-image: url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' width='220' height='220'%3E%3Cfilter id='n'%3E%3CfeTurbulence type='fractalNoise' baseFrequency='0.9' numOctaves='3' stitchTiles='stitch'/%3E%3C/filter%3E%3Crect width='100%25' height='100%25' filter='url(%23n)'/%3E%3C/svg%3E");
+  animation: grain 0.8s steps(6) infinite;
+}
+
+@keyframes grain {
+  0% { transform: translate(0, 0); }
+  20% { transform: translate(-6%, 4%); }
+  40% { transform: translate(5%, -7%); }
+  60% { transform: translate(-3%, 8%); }
+  80% { transform: translate(7%, 3%); }
+  100% { transform: translate(-4%, -5%); }
+}
+
+.rec-dot {
+  animation: rec 1.2s ease-in-out infinite;
+}
+
+@keyframes rec {
+  50% { opacity: 0.2; }
+}
+
+.tunnel-glow {
+  background:
+    radial-gradient(circle at 50% 50%, rgba(194, 162, 122, 0.14), transparent 45%),
+    radial-gradient(ellipse 80% 60% at 50% 110%, rgba(51, 64, 47, 0.85), transparent 70%);
+}
+
+.quiet-glow {
+  will-change: transform, opacity;
+  background: radial-gradient(circle, rgba(111, 125, 103, 0.6) 0%, rgba(51, 64, 47, 0.3) 38%, transparent 64%);
+}
+
+/* Misty paper, as on Lifetouch's sage and blush album pages */
+.hero-bg {
+  background-color: #eeeae2;
+  background-image:
+    radial-gradient(ellipse 50% 60% at 50% 48%, rgba(111, 125, 103, 0.16), rgba(111, 125, 103, 0) 70%),
+    linear-gradient(180deg, #f2efe8 0%, #eeeae2 55%, #e4e0d6 100%);
+}
+
+/* The arch. Every measure is derived here so the CSS clip on the photo lines up with the arch
+   before any JS runs; HeroFlow then reads the same box from layout. */
+.hero-root {
+  --sh: 62svh;
+  --sw: calc(var(--sh) * 0.7);
+  --pt: calc(50svh - var(--sh) / 2 + 2svh);
+}
+
+@media (max-width: 639px) {
+  .hero-root {
+    --sh: 46svh;
+    --sw: min(calc(var(--sh) * 0.7), 76vw);
+    --pt: calc(50svh - var(--sh) / 2 + 1svh);
+  }
+}
+
+.hero-arch {
+  position: absolute;
+  left: calc(50% - var(--sw) / 2);
+  top: var(--pt);
+  width: var(--sw);
+  height: var(--sh);
+  border-radius: 9999px 9999px 0 0;
+  outline: 1px solid rgba(21, 27, 23, 0.22);
+  outline-offset: 12px;
+}
+
+.hero-frame {
+  clip-path: inset(
+    var(--pt) calc(50% - var(--sw) / 2) calc(100% - var(--pt) - var(--sh)) calc(50% - var(--sw) / 2)
+      round calc(var(--sw) / 2) calc(var(--sw) / 2) 0 0
+  );
+}
+
+.hero-word {
+  position: absolute;
+  top: calc(var(--pt) + var(--sh) * 0.52);
+  font-size: min(15vw, 27svh);
+  line-height: 0.8;
+  letter-spacing: -0.02em;
+  transform: translateY(-50%);
+}
+
+/* both halves stand clear of the arch, so neither word loses a letter behind the photo */
+.hero-word-life {
+  right: calc(50% + var(--sw) / 2 + 1.6vw);
+}
+
+.hero-word-touch {
+  left: calc(50% + var(--sw) / 2 + 1.6vw);
+}
+
+/* phones: the name stacks above and below the arch instead */
+@media (max-width: 639px) {
+  .hero-word {
+    font-size: min(23vw, 12svh);
+    transform: none;
+  }
+  .hero-word-life {
+    top: auto;
+    bottom: calc(100svh - var(--pt) + 1svh);
+    right: auto;
+    left: 7vw;
+  }
+  .hero-word-touch {
+    top: calc(var(--pt) + var(--sh) - 1svh);
+    left: auto;
+    right: 7vw;
+  }
+}
+
+.hero-caption {
+  position: absolute;
+  top: calc(var(--pt) + var(--sh) + 1.6svh);
+  left: 0;
+  right: 0;
+  text-align: center;
+}
+
+.jump-cover {
+  position: fixed;
+  inset: 0;
+  z-index: 80;
+  background: #151b17;
+  pointer-events: none;
+}
+
+/* Shared by the hero and the reel's first frame, so the hand-off crops identically */
+.hero-photo {
+  width: 100vw;
+  height: 100lvh;
+  max-width: none;
+  object-fit: cover;
+  object-position: 62% 45%;
+}
+
+.hero-bg::after {
+  content: '';
+  position: absolute;
+  inset: 0;
+  opacity: 0.16;
+  mix-blend-mode: overlay;
+  background-image: url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' width='220' height='220'%3E%3Cfilter id='n'%3E%3CfeTurbulence type='fractalNoise' baseFrequency='0.9' numOctaves='3' stitchTiles='stitch'/%3E%3C/filter%3E%3Crect width='100%25' height='100%25' filter='url(%23n)'/%3E%3C/svg%3E");
+}
+
+@keyframes fade-in {
+  from { opacity: 0; }
+  to { opacity: 1; }
+}
+
+/* The print is set down onto the mat like a stamp */
+@keyframes press {
+  from { opacity: 0; transform: scale(1.12); }
+  to { opacity: 1; transform: scale(1); }
+}
+
+@keyframes fade-up {
+  from { opacity: 0; transform: translateY(28px); }
+  to { opacity: 1; transform: translateY(0); }
+}
+
+@keyframes line {
+  from { transform: scaleX(0); }
+  to { transform: scaleX(1); }
+}
+
+@keyframes marquee {
+  from { transform: translateX(0); }
+  to { transform: translateX(-50%); }
+}
+
+.anim-fade-in {
+  animation: fade-in 1.2s ease-out both;
+}
+
+.anim-press {
+  animation: press 1.5s cubic-bezier(0.16, 1, 0.3, 1) both;
+}
+
+.anim-fade-up {
+  animation: fade-up 0.9s cubic-bezier(0.22, 1, 0.36, 1) both;
+}
+
+.anim-line {
+  transform-origin: left;
+  animation: line 1.1s cubic-bezier(0.76, 0, 0.24, 1) both;
+}
+
+.marquee {
+  animation: marquee 30s linear infinite;
+}
+
+/* Footer switch: ambient loops and entrances stop; scroll-linked motion stays under the reader's hand */
+.motion-off .anim-fade-in,
+.motion-off .anim-press,
+.motion-off .anim-fade-up,
+.motion-off .anim-line {
+  animation-duration: 0.01ms !important;
+  animation-delay: 0ms !important;
+}
+.motion-off .grain::after,
+.motion-off .rec-dot,
+.motion-off .marquee {
+  animation: none;
+}
