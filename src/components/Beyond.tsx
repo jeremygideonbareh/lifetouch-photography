@@ -22,10 +22,12 @@ export default function Beyond() {
       );
 
       mm.add({ wide: '(min-width: 1100px)', mid: '(min-width: 640px) and (max-width: 1099px)', narrow: '(max-width: 639px)' }, (ctx) => {
-        const { wide, mid } = ctx.conditions ?? {};
+        const { wide, mid, narrow } = ctx.conditions ?? {};
         const spread = wide || mid ? 30 : 0;
         // distance between fanned frames, in frame widths, sized so the outer frames stay on screen
-        const step = wide ? 1.12 : mid ? 0.9 : 1.08;
+        const step = wide ? 1.12 : mid ? 0.9 : 0.62;
+        // phones: the centre card sits on top of a loose, overlapping fan
+        gsap.set(frames, { zIndex: (i) => (i === 1 ? 3 : 1) });
         const tl = gsap.timeline({
           defaults: { ease: 'none' },
           scrollTrigger: { trigger: root.current, start: 'top top', end: '+=180%', pin: true, scrub: 1 },
@@ -43,7 +45,7 @@ export default function Beyond() {
               xPercent: (i) => -50 + (i - 1) * step * 100,
               yPercent: -50,
               rotateY: (i) => (i - 1) * -spread,
-              rotateZ: 0,
+              rotateZ: (i) => (narrow ? (i - 1) * 6 : 0),
               z: (i) => (!spread ? 0 : i === 1 ? 120 : -60),
               scale: mid ? 0.8 : 1,
               duration: 0.4,
@@ -69,7 +71,7 @@ export default function Beyond() {
         </a>
       </div>
 
-      <h2 data-s-title className="absolute inset-x-6 top-[14svh] z-0 text-[13vw] leading-[0.88] tracking-tight sm:inset-x-10 sm:text-[min(7.5vw,13svh)]">
+      <h2 data-s-title className="absolute inset-x-6 top-[max(14svh,7.5rem)] z-0 text-[13vw] leading-[0.88] tracking-tight sm:inset-x-10 sm:text-[min(7.5vw,13svh)]">
         <span className="mask block">
           <span className="inline-block">Beyond</span>
         </span>
@@ -87,13 +89,13 @@ export default function Beyond() {
             rel="noreferrer"
             data-frame
             data-cursor="Open"
-            className="absolute left-1/2 top-1/2 block h-[40vw] w-[29vw] sm:h-[50svh] sm:w-[35svh]"
+            className="absolute left-1/2 top-1/2 block h-[min(46svh,78vw)] w-[min(34svh,56vw)] sm:h-[50svh] sm:w-[35svh]"
             style={{ transformStyle: 'preserve-3d' }}
           >
             <span className="block h-full w-full overflow-hidden">
               <img src={thumb(f.image)} alt={f.label} loading="lazy" className="h-full w-full object-cover transition-transform duration-700 hover:scale-110" />
             </span>
-            <span data-s-label className="absolute -bottom-8 left-0 flex w-full justify-between whitespace-nowrap text-xs sm:-bottom-9 sm:text-sm">
+            <span data-s-label className="absolute inset-x-0 bottom-0 flex justify-between whitespace-nowrap bg-gradient-to-t from-pine/85 to-transparent px-3 pb-2 pt-8 text-xs sm:inset-x-auto sm:-bottom-9 sm:left-0 sm:w-full sm:bg-none sm:p-0 sm:text-sm">
               <span>{f.label}</span>
               <span className="text-dune">↗</span>
             </span>

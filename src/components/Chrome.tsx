@@ -105,7 +105,21 @@ export default function Chrome() {
       getLenis()?.start();
       opener.current?.focus?.();
     }
-    const onKey = (e: KeyboardEvent) => e.key === 'Escape' && setOpen(false);
+    const onKey = (e: KeyboardEvent) => {
+      if (e.key === 'Escape') return setOpen(false);
+      if (e.key !== 'Tab' || !drawer.current) return;
+      // keep Tab inside the open drawer
+      const items = drawer.current.querySelectorAll<HTMLElement>('a, button');
+      const first = items[0];
+      const last = items[items.length - 1];
+      if (e.shiftKey && document.activeElement === first) {
+        e.preventDefault();
+        last.focus();
+      } else if (!e.shiftKey && document.activeElement === last) {
+        e.preventDefault();
+        first.focus();
+      }
+    };
     if (open) window.addEventListener('keydown', onKey);
     return () => window.removeEventListener('keydown', onKey);
   }, [open]);
@@ -183,7 +197,7 @@ export default function Chrome() {
 
       <div ref={bar} className={`fixed inset-x-0 top-0 z-[60] flex items-center justify-between px-6 py-3 transition-colors duration-300 sm:px-10 ${light ? 'text-pine' : 'text-mist'}`}>
         <div
-          className={`pointer-events-none absolute inset-x-0 top-0 -z-10 h-24 bg-gradient-to-b transition-colors duration-300 ${light ? 'from-mist/90' : 'from-pine/80'} to-transparent`}
+          className={`pointer-events-none absolute inset-x-0 top-0 -z-10 h-24 bg-gradient-to-b transition-colors duration-300 ${light ? 'from-mist via-mist/85' : 'from-pine/80'} to-transparent`}
           aria-hidden="true"
         />
         <a href="#top" className="font-poem text-2xl italic tracking-wide">
@@ -197,7 +211,7 @@ export default function Chrome() {
           </span>
         </p>
         <div className="flex items-center gap-2 sm:gap-6">
-          <a href={PHONE} className="flex min-h-11 items-center text-sm hover:opacity-60">
+          <a href={PHONE} className="flex min-h-10 items-center rounded-full bg-dune px-4 text-sm text-pine transition-colors duration-300 hover:bg-mist sm:min-h-11 sm:bg-transparent sm:px-0 sm:text-current sm:hover:bg-transparent sm:hover:opacity-60">
             <span className="sm:hidden">Call</span>
             <span className="hidden sm:inline">{PHONE_LABEL}</span>
           </a>
@@ -216,6 +230,8 @@ export default function Chrome() {
         ref={drawer}
         className={`fixed inset-y-0 right-0 z-[75] w-[82%] max-w-sm bg-pine px-8 py-10 text-mist transition-transform duration-[600ms] ${open ? 'translate-x-0' : 'translate-x-full'}`}
         style={{ transitionTimingFunction: DRAWER_EASE }}
+        role="dialog"
+        aria-modal="true"
         aria-hidden={!open}
         aria-label="Site menu"
       >

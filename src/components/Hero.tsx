@@ -24,7 +24,7 @@ export default function Hero() {
   return (
     <section className="hero-root relative h-[100lvh] w-full overflow-hidden text-pine">
       <h1 className="sr-only">Lifetouch Photography: wedding and event photography in Shillong</h1>
-      <div className="hero-bg anim-fade-in absolute inset-0" aria-hidden="true" />
+      <div className="hero-bg absolute inset-0" aria-hidden="true" />
 
       {/* The name sits behind the arch; GSAP parts the two halves, CSS runs the entrance on the inner spans */}
       <div data-hero-life className="pointer-events-none absolute inset-0 z-10" aria-hidden="true">
@@ -38,7 +38,7 @@ export default function Hero() {
         </span>
       </div>
 
-      <div className="anim-press absolute inset-0 z-[15]" style={delay(250)}>
+      <div className="absolute inset-0 z-[15]">
         <div data-hero-arch className="hero-arch" aria-hidden="true" />
         <div data-hero-frame className="hero-frame absolute inset-0 overflow-hidden">
           <img data-hero-frame-img src={img(HERO_IMAGE)} alt="A couple embracing on a misty hilltop above the pines" className="hero-photo" />

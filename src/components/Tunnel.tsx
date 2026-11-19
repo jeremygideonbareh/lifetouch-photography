@@ -1,5 +1,5 @@
 import { useRef } from 'react';
-import { gsap, useGSAP } from '../lib/motion';
+import { curtain, gsap, useGSAP } from '../lib/motion';
 import { TUNNEL, TUNNEL_LINES, img, thumb } from '../data/content';
 
 const GAP = 520; // depth between frames, px
@@ -35,8 +35,10 @@ export default function Tunnel() {
           const isLast = i === last;
           const angle = i * 0.95 + p * 2.2;
           const r = isLast ? 0 : radius * (1 - Math.max(0, z) / 2400);
-          const x = Math.cos(angle) * r - cam.x * (1 + i * 0.02);
-          const y = Math.sin(angle) * r * 0.62 - cam.y * (1 + i * 0.02);
+          // the last frame lets go of the pointer as it fills the screen, so no edge ever shows
+          const follow = isLast ? 1 - gsap.utils.clamp(0, 1, (p - 0.8) / 0.15) : 1;
+          const x = Math.cos(angle) * r - cam.x * (1 + i * 0.02) * follow;
+          const y = Math.sin(angle) * r * 0.62 - cam.y * (1 + i * 0.02) * follow;
           const far = gsap.utils.clamp(0, 1, 1 + z / 4200);
           const near = isLast ? 1 : gsap.utils.clamp(0, 1, (NEAR - z) / 260);
           // frames behind the lens or beyond the fog cost nothing until they come back
@@ -63,6 +65,7 @@ export default function Tunnel() {
       };
 
       gsap.set(items, { xPercent: -50, yPercent: -50, force3D: true });
+      curtain(root.current, 'top top');
       render(0);
 
       const st = gsap.timeline({

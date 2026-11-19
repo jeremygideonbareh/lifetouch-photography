@@ -154,7 +154,7 @@ export default function Stories() {
       </div>
 
       <div data-track className="flex h-full w-max items-center will-change-transform">
-        <div data-intro className="relative flex h-full w-[100vw] shrink-0 flex-col justify-start px-6 pt-[15svh] sm:justify-center sm:px-0 sm:pl-[65vw] sm:pr-10 sm:pt-0">
+        <div data-intro className="relative flex h-full w-[100vw] shrink-0 flex-col justify-start px-6 pt-[69svh] sm:justify-center sm:pl-10 sm:pr-[62vw] sm:pt-0">
           <h2 className="relative z-10 text-[min(13vw,6.5svh)] leading-[0.92] tracking-tight sm:text-[5.6vw]">
             <span className="block">
               <SplitChars text="Every" />
@@ -169,7 +169,7 @@ export default function Stories() {
           <p data-intro-copy className="relative z-10 mt-4 max-w-sm text-sm leading-relaxed text-mist/70 sm:mt-8">
             Six weddings from the past year, in the studio’s own words.
           </p>
-          <div data-handoff className="absolute left-[19vw] top-[42svh] h-[44svh] w-[62vw] overflow-hidden rounded-t-full sm:left-[25vw] sm:top-[15svh] sm:h-[70svh] sm:w-[34vw]">
+          <div data-handoff className="absolute left-[30vw] top-[15svh] h-[50svh] w-[64vw] overflow-hidden rounded-t-full sm:left-[44vw] sm:top-[15svh] sm:h-[70svh] sm:w-[34vw]">
             {/* viewport-sized and offset so its crop matches the hero's full-screen frame exactly */}
             <img src={img(HERO_IMAGE)} alt="A couple embracing on a misty hilltop above the pines" className="hero-photo absolute" />
           </div>
@@ -182,7 +182,7 @@ export default function Stories() {
             className="relative grid h-full w-[100vw] shrink-0 grid-cols-12 content-center items-center gap-4 px-6 pt-20 sm:content-normal sm:px-10 sm:pt-0"
             style={{ perspective: '1200px' }}
           >
-            <div className="relative col-span-12 row-start-1 h-[min(48svh,calc(100svh-23rem))] sm:col-span-5 sm:col-start-2 sm:h-[70svh]">
+            <div className={`relative col-span-12 row-start-1 h-[min(48svh,calc(100svh-23rem))] sm:col-span-5 sm:h-[70svh] ${i % 2 ? 'sm:col-start-7' : 'sm:col-start-2'}`}>
               <div data-depth="0.2" className="absolute inset-0">
                 {/* every lead photo stands in the same arch the hero opened from */}
                 <div data-reveal className="h-full w-full">
@@ -200,7 +200,7 @@ export default function Stories() {
                 </div>
               </div>
             </div>
-            <div className="pointer-events-none absolute bottom-[8svh] right-[5vw] hidden h-[22svh] w-[13vw] sm:block">
+            <div className={`pointer-events-none absolute bottom-[8svh] hidden h-[22svh] w-[13vw] sm:block ${i % 2 ? 'left-[5vw]' : 'right-[5vw]'}`}>
               <div data-depth="1.6" className="absolute inset-0">
                 <div data-reveal className="h-full w-full overflow-hidden">
                   <img data-inner src={thumb(ch.images[2])} alt="" loading="lazy" className="h-full w-full object-cover" decoding="async" />
@@ -208,7 +208,7 @@ export default function Stories() {
               </div>
             </div>
 
-            <div className="relative z-10 col-span-12 row-start-2 self-start sm:col-span-4 sm:col-start-8 sm:row-start-1 sm:-translate-y-[4svh] sm:self-center">
+            <div className={`relative z-10 col-span-12 row-start-2 self-start sm:col-span-4 sm:row-start-1 sm:-translate-y-[4svh] sm:self-center ${i % 2 ? 'sm:col-start-2' : 'sm:col-start-8'}`}>
               <p className="mask">
                 <span data-num className="inline-block font-poem text-2xl italic text-dune sm:text-3xl">
                   Chapter {String(i + 1).padStart(2, '0')}

@@ -37,7 +37,14 @@ export default function App() {
       const link = (e.target as Element).closest?.('a[href^="#"]');
       if (!link) return;
       e.preventDefault();
-      scrollToAnchor(link.getAttribute('href')!);
+      const hash = link.getAttribute('href')!;
+      scrollToAnchor(hash);
+      // keyboard and screen-reader users land where the page now shows
+      const target = hash.length > 1 ? document.querySelector<HTMLElement>(hash) : null;
+      if (target) {
+        if (!target.hasAttribute('tabindex')) target.setAttribute('tabindex', '-1');
+        target.focus({ preventScroll: true });
+      }
     };
     document.addEventListener('click', onClick);
     return () => document.removeEventListener('click', onClick);
@@ -55,8 +62,10 @@ export default function App() {
       <main>
         <HeroFlow />
         <Stories />
-        <Tunnel />
-        <div className="bg-pine">
+        <div className="bg-fern">
+          <Tunnel />
+        </div>
+        <div className="bg-fern">
           <Quiet />
         </div>
         <div className="bg-pine">

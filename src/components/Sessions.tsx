@@ -115,6 +115,7 @@ export default function Sessions() {
                   {s.name}
                 </span>
                 </span>
+                <span className="text-xs text-sage sm:hidden">Message ↗</span>
               </span>
               <span data-meta className="hidden text-right text-sm text-pine/70 sm:block">
                 {s.note}

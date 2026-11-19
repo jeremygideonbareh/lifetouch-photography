@@ -46,7 +46,7 @@ export default function Quiet() {
         scrollTrigger: {
           trigger: root.current,
           start: 'top top',
-          end: '+=320%',
+          end: '+=220%',
           pin: true,
           scrub: 1,
           onRefresh: () => {
